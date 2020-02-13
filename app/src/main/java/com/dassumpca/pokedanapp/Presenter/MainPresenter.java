@@ -2,6 +2,7 @@ package com.dassumpca.pokedanapp.Presenter;
 
 import com.dassumpca.pokedanapp.Listener.AllPokemonListener;
 import com.dassumpca.pokedanapp.Model.Pokemon;
+import com.dassumpca.pokedanapp.Service.PokedexService;
 import com.dassumpca.pokedanapp.Service.RetrofitConfig;
 
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import retrofit2.Response;
 
 public class MainPresenter {
 
+    PokedexService service = new RetrofitConfig().getPokedexService();
+
     public void getAllPokemon(int pageSize, int offset, AllPokemonListener listener) {
         final int[] completed = {0};
         ArrayList<Pokemon> pokemonList = new ArrayList<Pokemon>();
@@ -20,13 +23,16 @@ public class MainPresenter {
 
         for (int i = offset; i < pageSize + offset; i++) {
 
-            Call<Pokemon> call = new RetrofitConfig().getPokedexService().getPokemon(i);
+            Call<Pokemon> call = service.getPokemon(i);
+
 
             call.enqueue(new Callback<Pokemon>() {
                 @Override
                 public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
                     Pokemon pokemon = response.body();
-                    pokemonList.add(pokemon);
+                    if(pokemon != null)
+                        pokemonList.add(pokemon);
+
                     completed[0]++;
 
                     if (completed[0] == pageSize) {
