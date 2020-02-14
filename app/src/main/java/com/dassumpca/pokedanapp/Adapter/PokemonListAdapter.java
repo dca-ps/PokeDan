@@ -12,9 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dassumpca.pokedanapp.Enum.ColorEnum;
+import com.dassumpca.pokedanapp.Enum.PokemonColorEnum;
 import com.dassumpca.pokedanapp.Model.Pokemon;
 import com.dassumpca.pokedanapp.R;
 import com.squareup.picasso.Picasso;
@@ -51,13 +52,28 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
         else{
             holder.pokemonCL.setVisibility(View.VISIBLE);
             holder.loadingLL.setVisibility(View.GONE);
-            holder.pokemonNameTV.setText(selectedPokemon.getId() + " - " + selectedPokemon.getNome());
+
+            String nomeString = selectedPokemon.getNome();
+
+            String upperString = nomeString.substring(0, 1).toUpperCase() + nomeString.substring(1).toLowerCase();
+
+
+            holder.pokemonNameTV.setText(upperString);
+            holder.pokemonNumberTV.setText("Nº " + selectedPokemon.getId());
             if(selectedPokemon.getEspecie() != null && selectedPokemon.getEspecie().getCor() != null)
-                holder.cardView.setCardBackgroundColor(Color.parseColor(ColorEnum.valueOf(selectedPokemon.getEspecie().getCor().getNome()).getCor()));
+                holder.cardView.setCardBackgroundColor(Color.parseColor(PokemonColorEnum.valueOf(selectedPokemon.getEspecie().getCor().getNome()).getCor()));
             Picasso.get()
                     .load(selectedPokemon.getImagens().getFrente())
                     .placeholder(R.drawable.pokeball)
                     .into(holder.pokemonImageIV);
+
+            LinearLayoutManager layoutManager
+                    = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+
+            holder.pokemonTypesRV.setLayoutManager(layoutManager);
+            PokemonTypeListAdapater adapater = new PokemonTypeListAdapater(context, selectedPokemon.getTipos());
+            holder.pokemonTypesRV.setAdapter(adapater);
+
         }
 
     }
@@ -69,20 +85,24 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
         return pokemonList.size();
     }
 
-    public class PokeViewHolder extends RecyclerView.ViewHolder {
+    class PokeViewHolder extends RecyclerView.ViewHolder {
         TextView pokemonNameTV;
+        TextView pokemonNumberTV;
         ImageView pokemonImageIV;
         LinearLayout loadingLL;
         ConstraintLayout pokemonCL;
         CardView cardView;
+        RecyclerView pokemonTypesRV;
 
-        public PokeViewHolder(View itemView) {
+        PokeViewHolder(View itemView) {
             super(itemView);
             pokemonNameTV = itemView.findViewById(R.id.pokemonNameTV);
             pokemonImageIV = itemView.findViewById(R.id.pokemonImageIV);
             loadingLL = itemView.findViewById(R.id.loadingLL);
             pokemonCL = itemView.findViewById(R.id.pokemonCL);
             cardView = itemView.findViewById(R.id.cardView);
+            pokemonNumberTV = itemView.findViewById(R.id.pokemonNumberTV);
+            pokemonTypesRV = itemView.findViewById(R.id.pokemonTypesRV);
         }
     }
 }

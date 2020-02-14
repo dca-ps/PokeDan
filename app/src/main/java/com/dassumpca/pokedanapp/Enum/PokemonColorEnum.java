@@ -1,6 +1,6 @@
 package com.dassumpca.pokedanapp.Enum;
 
-public enum ColorEnum {
+public enum PokemonColorEnum {
         black("#212121"),
         blue("#1976d2"),
         brown("#6d4c41"),
@@ -13,7 +13,8 @@ public enum ColorEnum {
         yellow("#ffee58");
 
         private String cor;
-        ColorEnum(String cor) {
+
+        PokemonColorEnum(String cor) {
                 this.cor = cor;
         }
 
