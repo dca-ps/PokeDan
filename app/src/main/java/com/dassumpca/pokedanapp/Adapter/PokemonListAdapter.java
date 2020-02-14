@@ -1,6 +1,7 @@
 package com.dassumpca.pokedanapp.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dassumpca.pokedanapp.Enum.ColorEnum;
 import com.dassumpca.pokedanapp.Model.Pokemon;
 import com.dassumpca.pokedanapp.R;
 import com.squareup.picasso.Picasso;
@@ -49,6 +52,8 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
             holder.pokemonCL.setVisibility(View.VISIBLE);
             holder.loadingLL.setVisibility(View.GONE);
             holder.pokemonNameTV.setText(selectedPokemon.getId() + " - " + selectedPokemon.getNome());
+            if(selectedPokemon.getEspecie() != null && selectedPokemon.getEspecie().getCor() != null)
+                holder.cardView.setCardBackgroundColor(Color.parseColor(ColorEnum.valueOf(selectedPokemon.getEspecie().getCor().getNome()).getCor()));
             Picasso.get()
                     .load(selectedPokemon.getImagens().getFrente())
                     .placeholder(R.drawable.pokeball)
@@ -69,6 +74,7 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
         ImageView pokemonImageIV;
         LinearLayout loadingLL;
         ConstraintLayout pokemonCL;
+        CardView cardView;
 
         public PokeViewHolder(View itemView) {
             super(itemView);
@@ -76,6 +82,7 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
             pokemonImageIV = itemView.findViewById(R.id.pokemonImageIV);
             loadingLL = itemView.findViewById(R.id.loadingLL);
             pokemonCL = itemView.findViewById(R.id.pokemonCL);
+            cardView = itemView.findViewById(R.id.cardView);
         }
     }
 }

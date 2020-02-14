@@ -11,9 +11,6 @@ public class Pokemon implements Serializable {
     @SerializedName("id")
     private int id;
 
-    @SerializedName("order")
-    private int ordem;
-
     @SerializedName("name")
     private String nome;
 
@@ -23,6 +20,8 @@ public class Pokemon implements Serializable {
     @SerializedName("types")
     private List<Slot> tipos;
 
+    @SerializedName("species")
+    private Specie especie;
 
 
 
@@ -42,14 +41,6 @@ public class Pokemon implements Serializable {
         this.nome = nome;
     }
 
-    public int getOrdem() {
-        return ordem;
-    }
-
-    public void setOrdem(int ordem) {
-        this.ordem = ordem;
-    }
-
     public Sprite getImagens() {
         return imagens;
     }
@@ -64,5 +55,13 @@ public class Pokemon implements Serializable {
 
     public void setTipos(List<Slot> tipos) {
         this.tipos = tipos;
+    }
+
+    public Specie getEspecie() {
+        return especie;
+    }
+
+    public void setEspecie(Specie especie) {
+        this.especie = especie;
     }
 }

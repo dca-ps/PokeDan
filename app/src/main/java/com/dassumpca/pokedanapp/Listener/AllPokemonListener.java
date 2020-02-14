@@ -5,6 +5,6 @@ import com.dassumpca.pokedanapp.Model.Pokemon;
 import java.util.List;
 
 public interface AllPokemonListener {
-        void onSuccess(List<Pokemon> pokemons);
-        void onFailure(String errorMessage);
+        void onSuccessAllPokemon(List<Pokemon> pokemons);
+        void onFailureAllPokemon(String errorMessage);
 }

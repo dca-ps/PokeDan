@@ -4,7 +4,9 @@ import android.os.Bundle;
 
 import com.dassumpca.pokedanapp.Adapter.PokemonListAdapter;
 import com.dassumpca.pokedanapp.Listener.AllPokemonListener;
+import com.dassumpca.pokedanapp.Listener.PokemonSpecieListener;
 import com.dassumpca.pokedanapp.Model.Pokemon;
+import com.dassumpca.pokedanapp.Model.Specie;
 import com.dassumpca.pokedanapp.Presenter.MainPresenter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -27,9 +29,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements AllPokemonListener {
+public class MainActivity extends AppCompatActivity implements AllPokemonListener, PokemonSpecieListener {
 
-    final int pageSize = 200;
+    final int pageSize = 20;
     int offSet = 1;
 
     boolean isLoading = true;
@@ -90,9 +92,17 @@ public class MainActivity extends AppCompatActivity implements AllPokemonListene
 
         loadItens();
     }
+    public void loadItens(){
+        allPokemon.add(null);
+        pokemonAdapter.notifyItemInserted(allPokemon.size() - 1);
+        mainRV.scrollToPosition(allPokemon.size() - 1);
+        presenter.getAllPokemon(pageSize, offSet, this, this);
+        offSet += pageSize;
+
+    }
 
     @Override
-    public void onSuccess(List<Pokemon> pokemons) {
+    public void onSuccessAllPokemon(List<Pokemon> pokemons) {
         if (allPokemon.size() > 0) {
             allPokemon.remove(allPokemon.size() - 1);
             int scrollPosition = allPokemon.size();
@@ -107,16 +117,25 @@ public class MainActivity extends AppCompatActivity implements AllPokemonListene
     }
 
     @Override
-    public void onFailure(String errorMessage) {
+    public void onFailureAllPokemon(String errorMessage) {
 
     }
 
-    public void loadItens(){
-        allPokemon.add(null);
-        pokemonAdapter.notifyItemInserted(allPokemon.size() - 1);
-        mainRV.scrollToPosition(allPokemon.size() - 1);
-        presenter.getAllPokemon(pageSize, offSet, MainActivity.this);
-        offSet += pageSize;
+
+
+    @Override
+    public void onSuccessSpecie(Specie specie) {
+        allPokemon.forEach(( pokemon) -> {
+            if(pokemon != null && pokemon.getEspecie().getNome().equalsIgnoreCase(specie.getNome())){
+                pokemon.setEspecie(specie);
+                pokemonAdapter.notifyItemChanged(allPokemon.indexOf(pokemon));
+            }
+        });
+
+    }
+
+    @Override
+    public void onFailureSpecie(String errorMessage) {
 
     }
 }
