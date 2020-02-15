@@ -1,8 +1,17 @@
 package com.dassumpca.pokedanapp.Activity;
 
+import android.app.ActionBar;
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import com.dassumpca.pokedanapp.Enum.PokemonColorEnum;
+import com.dassumpca.pokedanapp.Model.Pokemon;
+import com.dassumpca.pokedanapp.Model.Specie;
 import com.dassumpca.pokedanapp.R;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -13,43 +22,51 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ScrollingActivity extends AppCompatActivity {
+
+    final static String POKEMON_EXTRA_KEY = "POKEMON_EXTRA_KEY";
+    final static String SPECIE_EXTRA_KEY = "SPECIE_EXTRA_KEY";
+
+
+
+    public static void start(Activity activity, Pokemon pokemon, Specie specie){
+        Intent intent = new Intent(activity, ScrollingActivity.class);
+        intent.putExtra(POKEMON_EXTRA_KEY, pokemon);
+        intent.putExtra(SPECIE_EXTRA_KEY, specie);
+        activity.startActivity(intent);
+    }
+
+
+
+    Pokemon pokemon;
+    Specie specie;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.toolbar_layout)
+    CollapsingToolbarLayout collapsingToolbarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrolling);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_scrolling, menu);
-        return true;
-    }
+        pokemon = (Pokemon) getIntent().getSerializableExtra(POKEMON_EXTRA_KEY);
+        specie = (Specie) getIntent().getSerializableExtra(SPECIE_EXTRA_KEY);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        int pokemonColor = Color.parseColor(PokemonColorEnum.valueOf(specie.getCor().getNome()).getCor());
+        toolbar.setTitle(pokemon.getNome());
+        toolbar.setBackgroundColor(pokemonColor);
+        collapsingToolbarLayout.setBackgroundColor(pokemonColor);
+        collapsingToolbarLayout.setContentScrimColor(pokemonColor);
+        collapsingToolbarLayout.setStatusBarScrimColor(pokemonColor);
     }
 }

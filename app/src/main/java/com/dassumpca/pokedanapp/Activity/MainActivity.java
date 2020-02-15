@@ -1,9 +1,11 @@
 package com.dassumpca.pokedanapp.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.dassumpca.pokedanapp.Adapter.PokemonListAdapter;
 import com.dassumpca.pokedanapp.Listener.AllPokemonListener;
+import com.dassumpca.pokedanapp.Listener.MainPokemonClickListener;
 import com.dassumpca.pokedanapp.Listener.PokemonSpecieListener;
 import com.dassumpca.pokedanapp.Model.Pokemon;
 import com.dassumpca.pokedanapp.Model.Specie;
@@ -29,7 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements AllPokemonListener, PokemonSpecieListener {
+public class MainActivity extends AppCompatActivity implements AllPokemonListener, PokemonSpecieListener, MainPokemonClickListener {
 
     final int pageSize = 20;
     int offSet = 1;
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements AllPokemonListene
         allSpecies = new ArrayList<>();
         presenter = new MainPresenter();
 
-        pokemonAdapter = new PokemonListAdapter(this, allPokemon, allSpecies);
+        pokemonAdapter = new PokemonListAdapter(this, allPokemon, allSpecies, this);
 
         RecyclerView.LayoutManager layoutManager;
         layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -121,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements AllPokemonListene
 
     @Override
     public void onFailureAllPokemon(String errorMessage) {
-
+        //TODO Implementar tratamento de erro
     }
 
 
@@ -136,6 +138,16 @@ public class MainActivity extends AppCompatActivity implements AllPokemonListene
 
     @Override
     public void onFailureSpecie(String errorMessage) {
+        //TODO Implementar tratamento de erro
+    }
 
+    @Override
+    public void onPokemonClick(Pokemon pokemon) {
+        Specie specie = null;
+        if(allSpecies.contains(pokemon.getEspecie())){
+            int specieIndex = allSpecies.indexOf(pokemon.getEspecie());
+            specie = allSpecies.get(specieIndex);
+        }
+        ScrollingActivity.start(this, pokemon, specie);
     }
 }

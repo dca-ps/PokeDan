@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dassumpca.pokedanapp.Enum.PokemonColorEnum;
+import com.dassumpca.pokedanapp.Listener.MainPokemonClickListener;
 import com.dassumpca.pokedanapp.Model.Pokemon;
 import com.dassumpca.pokedanapp.Model.Specie;
 import com.dassumpca.pokedanapp.R;
@@ -30,12 +31,14 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
 
     private Context context;
     private List<Pokemon> pokemonList;
-    List<Specie> allSpecies;
+    private List<Specie> allSpecies;
+    private MainPokemonClickListener listener;
 
-    public PokemonListAdapter(Context context, List<Pokemon> pokemonList,  List<Specie> allSpecies){
+    public PokemonListAdapter(Context context, List<Pokemon> pokemonList, List<Specie> allSpecies, MainPokemonClickListener listener){
         this.context = context;
         this.pokemonList = pokemonList;
         this.allSpecies = allSpecies;
+        this.listener = listener;
     }
 
     @NonNull
@@ -72,6 +75,10 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
             else{
                 holder.cardView.setCardBackgroundColor(Color.WHITE);
             }
+
+            holder.cardView.setOnClickListener(v -> {
+                listener.onPokemonClick(selectedPokemon);
+            });
             Picasso.get()
                     .load(selectedPokemon.getImagens().getFrente())
                     .placeholder(R.drawable.pokeball)
