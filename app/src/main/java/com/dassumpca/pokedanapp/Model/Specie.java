@@ -1,5 +1,7 @@
 package com.dassumpca.pokedanapp.Model;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -49,5 +51,20 @@ public class Specie implements Serializable {
 
     public void setCor(Color cor) {
         this.cor = cor;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (this == obj)
+            return true;
+        // null check
+        if (obj == null)
+            return false;
+        // type check and cast
+        if (getClass() != obj.getClass())
+            return false;
+        Specie specie = (Specie) obj;
+
+        return this.getNome().equalsIgnoreCase(specie.getNome());
     }
 }

@@ -13,8 +13,7 @@
         android:id="@+id/pokemonTypeTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:fontFamily="sans-serif-black"
+        android:textColor="@color/colorPrimaryText"
         android:padding="6dp"
         />
 </androidx.cardview.widget.CardView>

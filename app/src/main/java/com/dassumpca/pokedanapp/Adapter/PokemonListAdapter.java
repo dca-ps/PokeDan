@@ -17,9 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dassumpca.pokedanapp.Enum.PokemonColorEnum;
 import com.dassumpca.pokedanapp.Model.Pokemon;
+import com.dassumpca.pokedanapp.Model.Specie;
 import com.dassumpca.pokedanapp.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -28,10 +30,12 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
 
     private Context context;
     private List<Pokemon> pokemonList;
+    List<Specie> allSpecies;
 
-    public PokemonListAdapter(Context context, List<Pokemon> pokemonList){
+    public PokemonListAdapter(Context context, List<Pokemon> pokemonList,  List<Specie> allSpecies){
         this.context = context;
         this.pokemonList = pokemonList;
+        this.allSpecies = allSpecies;
     }
 
     @NonNull
@@ -48,6 +52,7 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
         if(selectedPokemon == null){
             holder.loadingLL.setVisibility(View.VISIBLE);
             holder.pokemonCL.setVisibility(View.GONE);
+            holder.cardView.setCardBackgroundColor(Color.WHITE);
         }
         else{
             holder.pokemonCL.setVisibility(View.VISIBLE);
@@ -60,8 +65,13 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
 
             holder.pokemonNameTV.setText(upperString);
             holder.pokemonNumberTV.setText("Nº " + selectedPokemon.getId());
-            if(selectedPokemon.getEspecie() != null && selectedPokemon.getEspecie().getCor() != null)
-                holder.cardView.setCardBackgroundColor(Color.parseColor(PokemonColorEnum.valueOf(selectedPokemon.getEspecie().getCor().getNome()).getCor()));
+            if(allSpecies.contains(selectedPokemon.getEspecie())){
+                int specieIndex = allSpecies.indexOf(selectedPokemon.getEspecie());
+                holder.cardView.setCardBackgroundColor(Color.parseColor(PokemonColorEnum.valueOf(allSpecies.get(specieIndex).getCor().getNome()).getCor()));
+            }
+            else{
+                holder.cardView.setCardBackgroundColor(Color.WHITE);
+            }
             Picasso.get()
                     .load(selectedPokemon.getImagens().getFrente())
                     .placeholder(R.drawable.pokeball)

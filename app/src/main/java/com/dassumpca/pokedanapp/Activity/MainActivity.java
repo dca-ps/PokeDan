@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements AllPokemonListene
 
     MainPresenter presenter;
     ArrayList<Pokemon> allPokemon;
+    ArrayList<Specie> allSpecies;
+
 
     PokemonListAdapter pokemonAdapter;
 
@@ -57,9 +59,10 @@ public class MainActivity extends AppCompatActivity implements AllPokemonListene
 
 
         allPokemon = new ArrayList<>();
+        allSpecies = new ArrayList<>();
         presenter = new MainPresenter();
 
-        pokemonAdapter = new PokemonListAdapter(this, allPokemon);
+        pokemonAdapter = new PokemonListAdapter(this, allPokemon, allSpecies);
 
         RecyclerView.LayoutManager layoutManager;
         layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -125,13 +128,10 @@ public class MainActivity extends AppCompatActivity implements AllPokemonListene
 
     @Override
     public void onSuccessSpecie(Specie specie) {
-        allPokemon.forEach(( pokemon) -> {
-            if(pokemon != null && pokemon.getEspecie().getNome().equalsIgnoreCase(specie.getNome())){
-                pokemon.setEspecie(specie);
-                pokemonAdapter.notifyItemChanged(allPokemon.indexOf(pokemon));
-            }
-        });
-
+        if(!allSpecies.contains(specie)){
+            allSpecies.add(specie);
+            pokemonAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
