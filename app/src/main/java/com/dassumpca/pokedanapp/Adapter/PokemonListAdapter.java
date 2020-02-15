@@ -20,6 +20,7 @@ import com.dassumpca.pokedanapp.Listener.MainPokemonClickListener;
 import com.dassumpca.pokedanapp.Model.Pokemon;
 import com.dassumpca.pokedanapp.Model.Specie;
 import com.dassumpca.pokedanapp.R;
+import com.dassumpca.pokedanapp.Utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -63,10 +64,7 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
 
             String nomeString = selectedPokemon.getNome();
 
-            String upperString = nomeString.substring(0, 1).toUpperCase() + nomeString.substring(1).toLowerCase();
-
-
-            holder.pokemonNameTV.setText(upperString);
+            holder.pokemonNameTV.setText(Utils.capitalize(nomeString));
             holder.pokemonNumberTV.setText("Nº " + selectedPokemon.getId());
             if(allSpecies.contains(selectedPokemon.getEspecie())){
                 int specieIndex = allSpecies.indexOf(selectedPokemon.getEspecie());

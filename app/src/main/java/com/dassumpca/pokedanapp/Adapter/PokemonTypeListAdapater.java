@@ -18,13 +18,14 @@ import com.dassumpca.pokedanapp.Enum.PokemonColorEnum;
 import com.dassumpca.pokedanapp.Enum.TypeColorEnum;
 import com.dassumpca.pokedanapp.Model.Slot;
 import com.dassumpca.pokedanapp.R;
+import com.dassumpca.pokedanapp.Utils.Utils;
 
 import java.util.List;
 
 public class PokemonTypeListAdapater extends RecyclerView.Adapter<PokemonTypeListAdapater.TypeViewHolder> {
 
-    List<Slot> tipos;
-    Context context;
+    private List<Slot> tipos;
+    private Context context;
     PokemonTypeListAdapater(Context context, List<Slot> tipos){
         this.tipos = tipos;
         this.context = context;
@@ -43,9 +44,7 @@ public class PokemonTypeListAdapater extends RecyclerView.Adapter<PokemonTypeLis
 
         String tipeString = selectedType.getTipo().getNome();
 
-        String upperString = tipeString.substring(0, 1).toUpperCase() + tipeString.substring(1).toLowerCase();
-
-        holder.pokemonTypeTV.setText(upperString);
+        holder.pokemonTypeTV.setText(Utils.capitalize(tipeString));
 
         holder.pokemonTypeCV.setCardBackgroundColor(Color.parseColor(TypeColorEnum.valueOf(tipeString).getCor()));
 

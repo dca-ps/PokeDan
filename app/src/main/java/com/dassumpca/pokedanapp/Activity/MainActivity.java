@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements AllPokemonListene
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(R.string.app_name);
 
 
         allPokemon = new ArrayList<>();

@@ -9,7 +9,7 @@ public enum PokemonColorEnum {
         pink("#f06292"),
         purple("#ba68c8"),
         red("#f44336"),
-        white("#fafafa"),
+        white("#e3e3e3"),
         yellow("#ffee58");
 
         private String cor;
