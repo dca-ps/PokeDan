@@ -30,6 +30,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainActivity extends AppCompatActivity implements AllPokemonListener, PokemonSpecieListener, MainPokemonClickListener {
 
@@ -112,7 +113,11 @@ public class MainActivity extends AppCompatActivity implements AllPokemonListene
             int scrollPosition = allPokemon.size();
             pokemonAdapter.notifyItemRemoved(scrollPosition);
         }
-        allPokemon.addAll(pokemons);
+        for(Pokemon pokemon : pokemons){
+            if(!allPokemon.contains(pokemon)){
+                allPokemon.addAll(pokemons);
+            }
+        }
         allPokemon.sort((o1, o2) -> Integer.compare(o1.getId(), o2.getId()));
 
         pokemonAdapter.notifyDataSetChanged();
@@ -137,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements AllPokemonListene
 
     @Override
     public void onFailureSpecie(String errorMessage) {
-        //TODO Implementar tratamento de erro
+       //TODO Implementar tratamento de erro
     }
 
     @Override

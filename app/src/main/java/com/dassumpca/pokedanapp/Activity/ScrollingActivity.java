@@ -107,7 +107,6 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
         abilitiesAdapter = new PokemonAbilitiesAdapter(this, allAbilities);
         typesAdapter = new PokemonTypeListAdapater(this, pokemon.getTipos());
 
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(Utils.capitalize(pokemon.getNome()));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -161,8 +160,6 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
 
         typesRV.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         typesRV.setAdapter(typesAdapter);
-
-
     }
 
 
@@ -181,7 +178,7 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
 
     @Override
     public void onFailureSpecie(String errorMessage) {
-        //TODO Implementar fail
+        //TODO Implementar tratamento de erro
     }
 
 
@@ -199,6 +196,6 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
 
     @Override
     public void onFailureAbility(String errorMessage) {
-        //TODO Implementar fail
+        //TODO Implementar tratamento de erro
     }
 }
