@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import com.dassumpca.pokedanapp.Enum.PokemonColorEnum;
 import com.dassumpca.pokedanapp.Listener.PokemonSpecieListener;
+import com.dassumpca.pokedanapp.Model.BaseStat;
 import com.dassumpca.pokedanapp.Model.Pokemon;
 import com.dassumpca.pokedanapp.Model.Specie;
 import com.dassumpca.pokedanapp.Model.Sprite;
@@ -29,6 +30,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +44,7 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
     final static String POKEMON_EXTRA_KEY = "POKEMON_EXTRA_KEY";
     final static String SPECIE_EXTRA_KEY = "SPECIE_EXTRA_KEY";
 
-    public static void start(Activity activity, Pokemon pokemon, Specie specie){
+    public static void start(Activity activity, Pokemon pokemon, Specie specie) {
         Intent intent = new Intent(activity, ScrollingActivity.class);
         intent.putExtra(POKEMON_EXTRA_KEY, pokemon);
         intent.putExtra(SPECIE_EXTRA_KEY, specie);
@@ -58,6 +60,19 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
     @BindView(R.id.image_slider)
     ImageSlider imageSlider;
 
+    @BindView(R.id.hpValueTV)
+    TextView hpValueTV;
+    @BindView(R.id.attackValueTV)
+    TextView attackValueTV;
+    @BindView(R.id.defenseValueTV)
+    TextView defenseValueTV;
+    @BindView(R.id.specialAttackValueTV)
+    TextView specialAttackValueTV;
+    @BindView(R.id.specialDefenseValueTV)
+    TextView specialDefenseValueTV;
+    @BindView(R.id.speedValueTV)
+    TextView speedValueTV;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,33 +86,52 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
         presenter = new MainPresenter();
 
 
-        if( getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(Utils.capitalize(pokemon.getNome()));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        if(specie != null){
+        if (specie != null) {
             colorScreen();
-        }
-        else{
+        } else {
             presenter.getPokemonEspecie(pokemon.getEspecie().getNome(), this);
         }
 
         ArrayList<SlideModel> imageList = new ArrayList<SlideModel>();
-        for (String image : pokemon.getImagens().getSpriteList()){
-            if(image != null){
+        for (String image : pokemon.getImagens().getSpriteList()) {
+            if (image != null) {
                 imageList.add(new SlideModel(image));
             }
         }
+        imageSlider.setImageList(imageList, true);
 
-       imageSlider.setImageList(imageList, true);
 
+        for(BaseStat stat : pokemon.getStats()){
+            if(stat.getStat().getName().equalsIgnoreCase("hp")){
+                hpValueTV.setText(String.valueOf(stat.getBaseStat()));
+            }
+            else if (stat.getStat().getName().equalsIgnoreCase("special-defense")){
+                specialDefenseValueTV.setText(String.valueOf(stat.getBaseStat()));
+            }
+            else if (stat.getStat().getName().equalsIgnoreCase("speed")){
+                speedValueTV.setText(String.valueOf(stat.getBaseStat()));
+            }
+            else if (stat.getStat().getName().equalsIgnoreCase("special-attack")){
+                specialAttackValueTV.setText(String.valueOf(stat.getBaseStat()));
+            }
+            else if (stat.getStat().getName().equalsIgnoreCase("defense")){
+                defenseValueTV.setText(String.valueOf(stat.getBaseStat()));
+            }
+            else if (stat.getStat().getName().equalsIgnoreCase("attack")){
+                attackValueTV.setText(String.valueOf(stat.getBaseStat()));
+            }
 
+        }
     }
 
 
-    void colorScreen(){
+    void colorScreen() {
         PokemonColorEnum pokemonColorEnum = PokemonColorEnum.valueOf(specie.getCor().getNome());
         int pokemonColor = Color.parseColor(pokemonColorEnum.getCor());
         toolbar.setBackgroundColor(pokemonColor);

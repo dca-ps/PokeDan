@@ -23,6 +23,8 @@ public class Pokemon implements Serializable {
     @SerializedName("species")
     private Specie especie;
 
+    @SerializedName("stats")
+    private List<BaseStat> stats;
 
 
     public int getId() {
@@ -63,5 +65,13 @@ public class Pokemon implements Serializable {
 
     public void setEspecie(Specie especie) {
         this.especie = especie;
+    }
+
+    public List<BaseStat> getStats() {
+        return stats;
+    }
+
+    public void setStats(List<BaseStat> stats) {
+        this.stats = stats;
     }
 }
