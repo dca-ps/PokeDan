@@ -7,8 +7,13 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import com.dassumpca.pokedanapp.Adapter.PokemonAbilitiesAdapter;
+import com.dassumpca.pokedanapp.Adapter.PokemonTypeListAdapater;
 import com.dassumpca.pokedanapp.Enum.PokemonColorEnum;
+import com.dassumpca.pokedanapp.Listener.PokemonAbilityListener;
 import com.dassumpca.pokedanapp.Listener.PokemonSpecieListener;
+import com.dassumpca.pokedanapp.Model.Ability;
+import com.dassumpca.pokedanapp.Model.BaseAbility;
 import com.dassumpca.pokedanapp.Model.BaseStat;
 import com.dassumpca.pokedanapp.Model.Pokemon;
 import com.dassumpca.pokedanapp.Model.Specie;
@@ -25,6 +30,9 @@ import com.squareup.picasso.Picasso;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
 import android.view.Menu;
@@ -39,7 +47,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ScrollingActivity extends AppCompatActivity implements PokemonSpecieListener {
+public class ScrollingActivity extends AppCompatActivity implements PokemonSpecieListener, PokemonAbilityListener {
 
     final static String POKEMON_EXTRA_KEY = "POKEMON_EXTRA_KEY";
     final static String SPECIE_EXTRA_KEY = "SPECIE_EXTRA_KEY";
@@ -54,6 +62,11 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
     Pokemon pokemon;
     Specie specie;
     MainPresenter presenter;
+    List<Ability> allAbilities;
+
+    PokemonAbilitiesAdapter abilitiesAdapter;
+    PokemonTypeListAdapater typesAdapter;
+
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -73,6 +86,12 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
     @BindView(R.id.speedValueTV)
     TextView speedValueTV;
 
+    @BindView(R.id.abilitiesRV)
+    RecyclerView abilitiesRV;
+
+    @BindView(R.id.typesRV)
+    RecyclerView typesRV;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +103,9 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
         pokemon = (Pokemon) getIntent().getSerializableExtra(POKEMON_EXTRA_KEY);
         specie = (Specie) getIntent().getSerializableExtra(SPECIE_EXTRA_KEY);
         presenter = new MainPresenter();
+        allAbilities = new ArrayList<>();
+        abilitiesAdapter = new PokemonAbilitiesAdapter(this, allAbilities);
+        typesAdapter = new PokemonTypeListAdapater(this, pokemon.getTipos());
 
 
         if (getSupportActionBar() != null) {
@@ -126,8 +148,21 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
             else if (stat.getStat().getName().equalsIgnoreCase("attack")){
                 attackValueTV.setText(String.valueOf(stat.getBaseStat()));
             }
-
         }
+
+
+        for(BaseAbility ability : pokemon.getAbilities()){
+            presenter.getPokemonAbility(ability.getAbility().getName(), this);
+        }
+
+
+        abilitiesRV.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        abilitiesRV.setAdapter(abilitiesAdapter);
+
+        typesRV.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        typesRV.setAdapter(typesAdapter);
+
+
     }
 
 
@@ -142,12 +177,11 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
     public void onSuccessSpecie(Specie specie) {
         this.specie = specie;
         colorScreen();
-
     }
 
     @Override
     public void onFailureSpecie(String errorMessage) {
-        //TODO Implementar failr
+        //TODO Implementar fail
     }
 
 
@@ -155,5 +189,16 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    public void onSuccessAbility(Ability ability) {
+        allAbilities.add(ability);
+        abilitiesAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onFailureAbility(String errorMessage) {
+        //TODO Implementar fail
     }
 }

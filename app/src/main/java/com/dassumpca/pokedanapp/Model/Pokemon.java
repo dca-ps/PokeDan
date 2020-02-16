@@ -26,6 +26,9 @@ public class Pokemon implements Serializable {
     @SerializedName("stats")
     private List<BaseStat> stats;
 
+    @SerializedName("abilities")
+    private List<BaseAbility> abilities;
+
 
     public int getId() {
         return id;
@@ -73,5 +76,13 @@ public class Pokemon implements Serializable {
 
     public void setStats(List<BaseStat> stats) {
         this.stats = stats;
+    }
+
+    public List<BaseAbility> getAbilities() {
+        return abilities;
+    }
+
+    public void setAbilities(List<BaseAbility> abilities) {
+        this.abilities = abilities;
     }
 }

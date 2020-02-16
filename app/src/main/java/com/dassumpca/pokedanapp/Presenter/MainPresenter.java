@@ -1,7 +1,9 @@
 package com.dassumpca.pokedanapp.Presenter;
 
 import com.dassumpca.pokedanapp.Listener.AllPokemonListener;
+import com.dassumpca.pokedanapp.Listener.PokemonAbilityListener;
 import com.dassumpca.pokedanapp.Listener.PokemonSpecieListener;
+import com.dassumpca.pokedanapp.Model.Ability;
 import com.dassumpca.pokedanapp.Model.Pokemon;
 import com.dassumpca.pokedanapp.Model.Specie;
 import com.dassumpca.pokedanapp.Service.PokedexService;
@@ -73,5 +75,25 @@ public class MainPresenter {
             }
         });
 
+    }
+
+
+    public void getPokemonAbility(String name, PokemonAbilityListener listener){
+        Call<Ability> call = service.getAbility(name);
+
+        call.enqueue(new Callback<Ability>() {
+            @Override
+            public void onResponse(Call<Ability> call, Response<Ability> response) {
+                Ability ability = response.body();
+
+                listener.onSuccessAbility(ability);
+
+            }
+
+            @Override
+            public void onFailure(Call<Ability> call, Throwable t) {
+                listener.onFailureAbility(t.getMessage());
+            }
+        });
     }
 }
