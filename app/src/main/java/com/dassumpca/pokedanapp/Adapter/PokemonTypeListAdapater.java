@@ -47,8 +47,6 @@ public class PokemonTypeListAdapater extends RecyclerView.Adapter<PokemonTypeLis
         holder.pokemonTypeTV.setText(Utils.capitalize(tipeString));
 
         holder.pokemonTypeCV.setCardBackgroundColor(Color.parseColor(TypeColorEnum.valueOf(tipeString).getCor()));
-
-
     }
 
     @Override

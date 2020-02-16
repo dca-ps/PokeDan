@@ -11,12 +11,16 @@ import com.dassumpca.pokedanapp.Enum.PokemonColorEnum;
 import com.dassumpca.pokedanapp.Listener.PokemonSpecieListener;
 import com.dassumpca.pokedanapp.Model.Pokemon;
 import com.dassumpca.pokedanapp.Model.Specie;
+import com.dassumpca.pokedanapp.Model.Sprite;
 import com.dassumpca.pokedanapp.Presenter.MainPresenter;
 import com.dassumpca.pokedanapp.R;
 import com.dassumpca.pokedanapp.Utils.Utils;
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.squareup.picasso.Picasso;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,6 +28,11 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,20 +53,17 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
     Specie specie;
     MainPresenter presenter;
 
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.toolbar_layout)
-    CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.image_slider)
+    ImageSlider imageSlider;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrolling);
         ButterKnife.bind(this);
-
-        toolbar.setSubtitleTextColor(Color.BLACK);
-
         setSupportActionBar(toolbar);
 
         pokemon = (Pokemon) getIntent().getSerializableExtra(POKEMON_EXTRA_KEY);
@@ -71,7 +77,6 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-
         if(specie != null){
             colorScreen();
         }
@@ -79,6 +84,14 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
             presenter.getPokemonEspecie(pokemon.getEspecie().getNome(), this);
         }
 
+        ArrayList<SlideModel> imageList = new ArrayList<SlideModel>();
+        for (String image : pokemon.getImagens().getSpriteList()){
+            if(image != null){
+                imageList.add(new SlideModel(image));
+            }
+        }
+
+       imageSlider.setImageList(imageList, true);
 
 
     }
@@ -88,9 +101,7 @@ public class ScrollingActivity extends AppCompatActivity implements PokemonSpeci
         PokemonColorEnum pokemonColorEnum = PokemonColorEnum.valueOf(specie.getCor().getNome());
         int pokemonColor = Color.parseColor(pokemonColorEnum.getCor());
         toolbar.setBackgroundColor(pokemonColor);
-        collapsingToolbarLayout.setBackgroundColor(pokemonColor);
-        collapsingToolbarLayout.setContentScrimColor(pokemonColor);
-        collapsingToolbarLayout.setStatusBarScrimColor(pokemonColor);
+
     }
 
     @Override
